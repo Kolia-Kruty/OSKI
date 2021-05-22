@@ -1,0 +1,24 @@
+﻿@model OSKI.Models.Test
+@{
+    ViewData["Title"] = "Agree Page";
+}
+
+<div class="container">
+    <h1>@Model?.Title</h1>
+    <p>@Model?.Description</p>
+    <form asp-action="AgreeToTest" asp-route-id="@Model.Id" method="post">
+        <div class="m-2">
+            <input class="form-check-input" type="checkbox" id="check" name="check" value="true">
+            <label class="form-check-label" for="check">
+                I agree to start
+            </label>
+        </div>
+        <button id="button" type="submit" class="btn btn-primary btn-sm" disabled>Proceed</button>
+    </form>
+</div>
+
+<script>
+    check.onclick = function () {
+        document.getElementById("button").disabled = !document.getElementById("check").checked;
+    }
+</script>

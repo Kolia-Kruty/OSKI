@@ -1,0 +1,59 @@
+﻿@model OSKI.ViewModels.QuestionViewModel
+@{
+    ViewData["Title"] = "Question Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Question</h1>
+
+    <div class="row">
+        <div class="card col">
+            <form method="post">
+                <div class="card-header">
+                    Питання №@Model.NumberQuestion
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">@Model.Question.Text</h5>
+
+                    <div class="text-left">
+
+                        <input type="number" hidden value="@(Model.NumberQuestion)" name="questionId" />
+
+                        @foreach (Answer item in Model.Question.Answers)
+                        {
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="answerId"
+                                       id="@item.Id" value="@item.Id">
+                                <label class="form-check-label" for="@item.Id">
+                                    @item.Text
+                                </label>
+                            </div>
+                        }
+                    </div>
+
+                </div>
+                <div class="card-footer text-muted">
+
+                    @if (Model.NumberQuestion < Model.Count)
+                    {
+                        <button asp-controller="Question" asp-action="Index"
+                                asp-route-testResultId="@Model.TestResultId"
+                                type="submit" class="btn btn-outline-secondary m-1">
+                            Наступне питання
+                        </button>
+
+                    }
+
+                    @if (Model.NumberQuestion >= Model.Count)
+                    {
+                        <button asp-controller="Question" asp-action="Finish"
+                                asp-route-testResultId="@Model.TestResultId"
+                                type="submit" class="btn btn-outline-success m-1">
+                            Завершити
+                        </button>
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

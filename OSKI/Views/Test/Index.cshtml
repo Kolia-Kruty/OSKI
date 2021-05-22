@@ -1,0 +1,32 @@
+﻿@model IEnumerable<OSKI.Models.Test>
+@{
+    ViewData["Title"] = "Test Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Tests</h1>
+
+    <div class="row shadow-none">
+        @{
+            if (Model.Any())
+            {
+                foreach (Test item in Model)
+                {
+                    <div class="col-sm-4 p-1 m-1 shadow">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">@item.Title</h5>
+                                <a class="btn btn-primary" asp-action="AgreeToTest"
+                                   asp-route-id="@item.Id">Старт</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h4>Тести відсутні!</h4>
+            }
+        }
+    </div>
+</div>

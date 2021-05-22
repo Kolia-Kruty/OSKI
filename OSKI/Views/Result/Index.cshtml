@@ -1,0 +1,13 @@
+﻿@model OSKI.Models.TestResult
+@{
+    ViewData["Title"] = "Result Page";
+}
+<div class="shadow-lg p-3 mb-5 bg-body rounded text-center">
+    <h1 class="text-center">Result</h1>
+    <div>
+        <h2>Ваш результат становить: @(Model.Rating)% правильних відповідей!</h2>
+    </div>
+    <div class="mt-4">
+        <a class="btn btn-success" asp-controller="Test" asp-action="Index">Повернутися до тестів!</a>
+    </div>
+</div>
