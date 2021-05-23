@@ -10,14 +10,14 @@
         <div class="card col">
             <form method="post">
                 <div class="card-header">
-                    Питання №@Model.NumberQuestion
+                    Питання №@Model.QuestionIndex
                 </div>
                 <div class="card-body">
                     <h5 class="card-title text-center">@Model.Question.Text</h5>
 
                     <div class="text-left">
 
-                        <input type="number" hidden value="@(Model.NumberQuestion)" name="questionId" />
+                        <input type="number" hidden value="@(Model.QuestionIndex)" name="questionIndex" />
 
                         @foreach (Answer item in Model.Question.Answers)
                         {
@@ -34,7 +34,7 @@
                 </div>
                 <div class="card-footer text-muted">
 
-                    @if (Model.NumberQuestion < Model.Count)
+                    @if (Model.QuestionIndex < Model.Count)
                     {
                         <button asp-controller="Question" asp-action="Index"
                                 asp-route-testResultId="@Model.TestResultId"
@@ -44,7 +44,7 @@
 
                     }
 
-                    @if (Model.NumberQuestion >= Model.Count)
+                    @if (Model.QuestionIndex >= Model.Count)
                     {
                         <button asp-controller="Question" asp-action="Finish"
                                 asp-route-testResultId="@Model.TestResultId"

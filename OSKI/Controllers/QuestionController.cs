@@ -24,9 +24,9 @@ namespace OSKI.Controllers
 
 
         [Route("")]
-        public IActionResult Index(int testResultId, int questionId = 0, int? answerId = null)
+        public IActionResult Index(int testResultId, int questionIndex = 0, int? answerId = null)
         {
-            if (testResultId < 1 || questionId < 0) return BadRequest();
+            if (testResultId < 1 || questionIndex < 0) return BadRequest();
 
             var testResult = db.TestResults.Include(a => a.Answers)
                 .Where(tr => tr.Id == testResultId && tr.ApplicationUserId == User.Claims.First().Value)
@@ -37,11 +37,11 @@ namespace OSKI.Controllers
 
             if (testResult == null || questions == null) return NotFound();
 
-            var question = questions.Skip(questionId).Take(1).FirstOrDefault();
+            var question = questions.Skip(questionIndex).Take(1).FirstOrDefault();
 
-            if (questionId > 0 && answerId > 0)
+            if (questionIndex > 0 && answerId > 0)
             {
-                var answer = questions[questionId - 1].Answers.Where(a => a.Id == answerId).FirstOrDefault();
+                var answer = questions[questionIndex - 1].Answers.Where(a => a.Id == answerId).FirstOrDefault();
 
                 if (answer != null)
                 {
@@ -55,16 +55,16 @@ namespace OSKI.Controllers
                 Count = questions.Count(),
                 TestResultId = testResultId,
                 Question = question,
-                NumberQuestion = questionId + 1
+                QuestionIndex = questionIndex + 1
             }); ;
         }
 
 
         [Route("[action]")]
         [HttpPost]
-        public IActionResult Finish(int testResultId, int questionId = 0, int? answerId = null)
+        public IActionResult Finish(int testResultId, int questionIndex = 0, int? answerId = null)
         {
-            if (testResultId < 1 || questionId < 0) return BadRequest();
+            if (testResultId < 1 || questionIndex < 0) return BadRequest();
 
             var testResult = db.TestResults.Include(a => a.Answers).ThenInclude(q => q.Question)
                 .Where(tr => tr.Id == testResultId && tr.ApplicationUserId == User.Claims.First().Value)
@@ -75,9 +75,9 @@ namespace OSKI.Controllers
 
             if (testResult == null || questions == null) return NotFound();
 
-            if (questionId > 0 && answerId > 0)
+            if (questionIndex > 0 && answerId > 0)
             {
-                var answer = questions[questionId - 1].Answers.Where(a => a.Id == answerId).FirstOrDefault();
+                var answer = questions[questionIndex - 1].Answers.Where(a => a.Id == answerId).FirstOrDefault();
 
                 if (answer != null)
                 {
