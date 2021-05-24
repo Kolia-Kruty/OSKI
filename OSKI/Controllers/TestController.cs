@@ -62,7 +62,6 @@ namespace OSKI.Controllers
 
             if (test == null) return NotFound();
 
-
             var testResult = new TestResult()
             {
                 StartDate = DateTime.Now,
