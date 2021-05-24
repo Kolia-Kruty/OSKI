@@ -9,5 +9,6 @@ namespace OSKI.Models
     public class ApplicationUser : IdentityUser
     {
         public List<TestResult> TestResults { get; set; }
+        public List<Test> Tests { get; set; }
     }
 }
