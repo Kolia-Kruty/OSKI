@@ -27,7 +27,7 @@ namespace OSKI.Controllers
         public IActionResult Index()
         {
             var tests = db.Tests.Include(t => t.TestsUsers)
-                .Where(w=>w.TestsUsers.Any(tu=>tu.ApplicationUserId == User.Claims.First().Value))
+                .Where(w => w.TestsUsers.Any(tu => tu.ApplicationUserId == User.Claims.First().Value))
                 .ToList();
 
             return View(tests);
@@ -54,9 +54,14 @@ namespace OSKI.Controllers
         {
             if (id < 1 || !check) return BadRequest();
 
-            if (db.Tests.Find(id) == null) return NotFound();
-
             string userId = User.Claims.First().Value;
+
+            var test = db.Tests.Include(t => t.TestsUsers)
+                .Where(w => w.TestsUsers.Any(tu => tu.ApplicationUserId == userId && tu.TestId == id))
+                .FirstOrDefault();
+
+            if (test == null) return NotFound();
+
 
             var testResult = new TestResult()
             {
