@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OSKI.Data;
 using OSKI.Models;
 using System;
@@ -25,7 +26,9 @@ namespace OSKI.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            var tests = db.Tests.ToList();
+            var tests = db.Tests.Include(t => t.TestsUsers)
+                .Where(w=>w.TestsUsers.Any(tu=>tu.ApplicationUserId == User.Claims.First().Value))
+                .ToList();
 
             return View(tests);
         }
@@ -36,7 +39,9 @@ namespace OSKI.Controllers
         {
             if (id < 1) return BadRequest();
 
-            var test = db.Tests.Find(id);
+            var test = db.Tests.Include(t => t.TestsUsers)
+                .Where(w => w.TestsUsers.Any(tu => tu.ApplicationUserId == User.Claims.First().Value && tu.TestId == id))
+                .FirstOrDefault();
 
             if (test == null) return NotFound();
 

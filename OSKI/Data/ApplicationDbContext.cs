@@ -13,6 +13,7 @@ namespace OSKI.Data
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<TestResult> TestResults { get; set; }
+        public DbSet<TestsUser> TestsUsers { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {

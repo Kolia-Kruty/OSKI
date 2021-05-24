@@ -10,8 +10,8 @@ using OSKI.Data;
 namespace OSKI.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210524114958_Add_UserId_In_Table_Test")]
-    partial class Add_UserId_In_Table_Test
+    [Migration("20210524213031_Add_Connect_Tests_Users")]
+    partial class Add_Connect_Tests_Users
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -296,9 +296,6 @@ namespace OSKI.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(450)
@@ -310,8 +307,6 @@ namespace OSKI.Data.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Tests");
                 });
@@ -345,6 +340,28 @@ namespace OSKI.Data.Migrations
                     b.HasIndex("TestId");
 
                     b.ToTable("TestResults");
+                });
+
+            modelBuilder.Entity("OSKI.Models.TestsUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("TestId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("TestsUsers");
                 });
 
             modelBuilder.Entity("OSKI.Models.ApplicationUser", b =>
@@ -442,15 +459,6 @@ namespace OSKI.Data.Migrations
                     b.Navigation("Test");
                 });
 
-            modelBuilder.Entity("OSKI.Models.Test", b =>
-                {
-                    b.HasOne("OSKI.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany("Tests")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("OSKI.Models.TestResult", b =>
                 {
                     b.HasOne("OSKI.Models.ApplicationUser", "ApplicationUser")
@@ -460,6 +468,23 @@ namespace OSKI.Data.Migrations
                     b.HasOne("OSKI.Models.Test", "Test")
                         .WithMany("TestResults")
                         .HasForeignKey("TestId");
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Test");
+                });
+
+            modelBuilder.Entity("OSKI.Models.TestsUser", b =>
+                {
+                    b.HasOne("OSKI.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("TestsUsers")
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.HasOne("OSKI.Models.Test", "Test")
+                        .WithMany("TestsUsers")
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
@@ -476,13 +501,15 @@ namespace OSKI.Data.Migrations
                     b.Navigation("Questions");
 
                     b.Navigation("TestResults");
+
+                    b.Navigation("TestsUsers");
                 });
 
             modelBuilder.Entity("OSKI.Models.ApplicationUser", b =>
                 {
                     b.Navigation("TestResults");
 
-                    b.Navigation("Tests");
+                    b.Navigation("TestsUsers");
                 });
 #pragma warning restore 612, 618
         }
